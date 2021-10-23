@@ -120,13 +120,13 @@ public class Patex {
         boolean wordBeforeWasNumber = false;
         outputFile.write("Evolution number" + this.delimiter + "value" + "\n");
         for (String word : this.chosenFileLines) {
-            if(word.matches("(-)*[ Eevolucçãaotion]+(.)*")){
-                String[] splitted = word.split(" ");
-                String evolution = splitted[splitted.length - 2];
+            if(isEvolution(word)){
+                String[] splitted = splitSpaces(word);
+                String evolution = getEvolutionNumber(splitted);
                 outputFile.write("\n" + evolution + this.delimiter);
                 wordBeforeWasNumber = false;
             }
-            else if(word.matches("[0-9]+(\\.[0-9]+)?")){
+            else if(isAnalysisValue(word)){
                 String sequence = wordBeforeWasNumber ? (this.delimiter + word) : word;
                 outputFile.write(sequence);
                 wordBeforeWasNumber = true;
@@ -134,6 +134,22 @@ public class Patex {
         }
         outputFile.close();
         return;
+    }
+
+    private String getEvolutionNumber(String[] splitted) {
+        return splitted[splitted.length - 2];
+    }
+
+    private String[] splitSpaces(String word) {
+        return word.split(" ");
+    }
+
+    private boolean isAnalysisValue(String word) {
+        return word.matches("[0-9]+(\\.[0-9]+)?");
+    }
+
+    private boolean isEvolution(String word) {
+        return word.matches("(-)*[ Eevolucçãaotion]+(.)*");
     }
 
     private void parseColumns(FileWriter outputFile) throws IOException {
@@ -145,13 +161,13 @@ public class Patex {
         this.matrizValues.add( new ArrayList<String>() );
 
         for (String word : this.chosenFileLines) {
-            if(word.matches("(-)*[ Eevolucçãaotion]+(.)*")){
-                String[] splitted = word.split(" ");
-                column = Integer.parseInt(splitted[splitted.length - 2]);
+            if(isEvolution(word)){
+                String[] splitted = splitSpaces(word);
+                column = Integer.parseInt(getEvolutionNumber(splitted));
                 line = 0;
                 this.matrizValues.get(0).add(Integer.toString(column));
             }
-            else if(word.matches("[0-9]+(\\.[0-9]+)?")){
+            else if(isAnalysisValue(word)){
                 ++line;
                 /* Caso a linha seja null , significa que todas as evolucoes anteriores sao menores que a atual e devem
                  ser null nessa linha */
