@@ -2,6 +2,7 @@ package com.tppe.tdd.patex;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -117,7 +118,7 @@ public class Patex {
 
     Boolean writeToOutputFile() throws Exception {
         if(this.wasChosenFileRead() && this.isOutputFormatChosen() && this.isOutputPathSet()) 
-            return new Parser(this).compute();
+            return new Parser(this).writeToOutputFIle();
 
         throw new Exception(
             "You must choose the path to save the output file before"

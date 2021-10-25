@@ -3,27 +3,19 @@ package com.tppe.tdd.patex;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Parser {
-    private String outputPath;
-    private Object userOutputFormatChoice;
-    String delimiter;
-    List<String> chosenFileLines;
-    ArrayList<ArrayList> matrizValues;
-
+    private Patex patex;
+    private FileWriter outputFile;
+ 
     public Parser(Patex patex) {
-        this.outputPath = patex.outputPath;
-        this.userOutputFormatChoice = patex.userOutputFormatChoice;
-        this.delimiter = patex.delimiter;
-        this.chosenFileLines = patex.chosenFileLines;
-        this.matrizValues = patex.matrizValues;
+        this.patex = patex;
+        this.outputFile = null;
     }
 
-    public boolean compute()throws Exception {
-        
-        FileWriter outputFile = new FileWriter(this.outputPath, false);
-            switch (this.userOutputFormatChoice.toString()) {
+    public boolean writeToOutputFIle()throws Exception {
+        this.outputFile = new FileWriter(patex.outputPath, false);
+            switch (patex.userOutputFormatChoice.toString()) {
                 case "Lines":
                     this.parseLines(outputFile);
                     break;
@@ -40,16 +32,16 @@ public class Parser {
 
     private void parseLines(FileWriter outputFile) throws IOException {
         boolean wordBeforeWasNumber = false;
-        outputFile.write("Evolution number" + this.delimiter + "value" + "\n");
-        for (String word : this.chosenFileLines) {
+        outputFile.write("Evolution number" + patex.delimiter + "value" + "\n");
+        for (String word : patex.chosenFileLines) {
             if(isEvolution(word)){
                 String[] splitted = splitSpaces(word);
                 String evolution = getEvolutionNumber(splitted);
-                outputFile.write("\n" + evolution + this.delimiter);
+                outputFile.write("\n" + evolution + patex.delimiter);
                 wordBeforeWasNumber = false;
             }
             else if(isAnalysisValue(word)){
-                String sequence = wordBeforeWasNumber ? (this.delimiter + word) : word;
+                String sequence = wordBeforeWasNumber ? (patex.delimiter + word) : word;
                 outputFile.write(sequence);
                 wordBeforeWasNumber = true;
             }
@@ -64,28 +56,28 @@ public class Parser {
         Integer column = 0;
         Integer line = 0;
         //Linha representando as evolucoes
-        this.matrizValues.add( new ArrayList<String>() );
+        patex.matrizValues.add( new ArrayList<String>() );
 
-        for (String word : this.chosenFileLines) {
+        for (String word : patex.chosenFileLines) {
             if(isEvolution(word)){
                 String[] splitted = splitSpaces(word);
                 column = Integer.parseInt(getEvolutionNumber(splitted));
                 line = 0;
-                this.matrizValues.get(0).add(Integer.toString(column));
+                patex.matrizValues.get(0).add(Integer.toString(column));
             }
             else if(isAnalysisValue(word)){
                 ++line;
                 /* Caso a linha seja null , significa que todas as evolucoes anteriores sao menores que a atual e devem
                  ser null nessa linha */
-                if(line == this.matrizValues.size()){
-                    this.matrizValues.add(new ArrayList<String>());
+                if(line == patex.matrizValues.size()){
+                    patex.matrizValues.add(new ArrayList<String>());
                     /*Preenchendo os valores dessa linha com null,
                     em que somente o valor na posicao "columns" tenha o valor "word" */
                     for(int i = 0; i < column; i++){
-                        this.matrizValues.get(line).add(null);
+                        patex.matrizValues.get(line).add(null);
                     }
                 }
-                this.matrizValues.get(line).add(word);
+                patex.matrizValues.get(line).add(word);
             }
         }
         parseColumnsWriteFile(outputFile);
@@ -93,13 +85,13 @@ public class Parser {
     }
 
     private void parseColumnsWriteFile(FileWriter outputFile)throws IOException{
-        outputFile.write("Evolution "+this.delimiter+"Evolution "+this.delimiter+"Evolution "+"\n");
-        outputFile.write("value " +this.delimiter+ "value " + this.delimiter + "value " + "\n");
+        outputFile.write("Evolution "+patex.delimiter+"Evolution "+patex.delimiter+"Evolution "+"\n");
+        outputFile.write("value " +patex.delimiter+ "value " + patex.delimiter + "value " + "\n");
         //Percorrendo as linhas
-        for(int i =0;i<this.matrizValues.size(); i++){
+        for(int i =0;i<patex.matrizValues.size(); i++){
             //Percorrendo o array list na posicao i
-            for(int j=0; j<this.matrizValues.get(i).size(); j++){
-                outputFile.write(this.matrizValues.get(i).get(j) + this.delimiter);
+            for(int j=0; j<patex.matrizValues.get(i).size(); j++){
+                outputFile.write(patex.matrizValues.get(i).get(j) + patex.delimiter);
             }
             outputFile.write("\n");
         }
