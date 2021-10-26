@@ -19,8 +19,8 @@ public class WriteToOutuputFileTest extends ChooseFileTest {
         this.patexapp = new Patex("../analysisTime.out", ";");
         this.patexapp.userOutputFormatChoice = "Lines";
         this.patexapp.outputPath = this.testFile.getAbsolutePath();
-        this.patexapp.readChosenFile();
-        assertEquals(true, this.patexapp.writeToOutputFile());
+        this.patexapp.persistence.readChosenFile(this.patexapp);
+        assertEquals(true, this.patexapp.persistence.writeToOutputFile(this.patexapp));
     }
 
     @Test()
@@ -28,8 +28,8 @@ public class WriteToOutuputFileTest extends ChooseFileTest {
         this.patexapp = new Patex("../analysisMemory.out", ";");
         this.patexapp.userOutputFormatChoice = "Lines";
         this.patexapp.outputPath = this.testFile.getAbsolutePath();
-        this.patexapp.readChosenFile();
-        assertEquals(true, this.patexapp.writeToOutputFile());
+        this.patexapp.persistence.readChosenFile(this.patexapp);
+        assertEquals(true, this.patexapp.persistence.writeToOutputFile(this.patexapp));
     }
 
     @Test()
@@ -37,8 +37,8 @@ public class WriteToOutuputFileTest extends ChooseFileTest {
         this.patexapp = new Patex("../analysisTime.out", ";");
         this.patexapp.userOutputFormatChoice = "Columns";
         this.patexapp.outputPath = this.testFile.getAbsolutePath();
-        this.patexapp.readChosenFile();
-        assertEquals(true, this.patexapp.writeToOutputFile());
+        this.patexapp.persistence.readChosenFile(this.patexapp);
+        assertEquals(true, this.patexapp.persistence.writeToOutputFile(this.patexapp));
     }
 
     @Test()
@@ -46,7 +46,7 @@ public class WriteToOutuputFileTest extends ChooseFileTest {
         this.patexapp = new Patex("../analysisMemory.out", ";");
         this.patexapp.userOutputFormatChoice = "Columns";
         this.patexapp.outputPath = this.testFile.getAbsolutePath();
-        this.patexapp.readChosenFile();
-        assertEquals(true, this.patexapp.writeToOutputFile());
+        this.patexapp.persistence.readChosenFile(this.patexapp);
+        assertEquals(true, this.patexapp.persistence.writeToOutputFile(this.patexapp));
     }
 }

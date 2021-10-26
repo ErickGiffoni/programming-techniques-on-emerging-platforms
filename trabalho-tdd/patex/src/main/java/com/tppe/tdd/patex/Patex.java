@@ -3,7 +3,6 @@ package com.tppe.tdd.patex;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +23,7 @@ public class Patex {
     List<String> chosenFileLines;
     String outputPath;
     ArrayList<ArrayList> matrizValues;
+    Persistence persistence;
 
     Patex(){
         this.fc = new JFileChooser();
@@ -33,7 +33,8 @@ public class Patex {
         this.chosenFileLines = null;
         this.outputPath = null;
         this.setOutputFormatchoices();
-        matrizValues = new ArrayList<ArrayList>();
+        this.matrizValues = new ArrayList<ArrayList>();
+        this.persistence = new Persistence();
     }
 
     Patex(String pathToFile){
@@ -44,7 +45,8 @@ public class Patex {
         this.chosenFileLines = null;
         this.outputPath = null;
         this.setOutputFormatchoices();
-        matrizValues = new ArrayList<ArrayList>();
+        this.matrizValues = new ArrayList<ArrayList>();
+        this.persistence = new Persistence();
     }
 
     Patex(String pathToFile, String delimiter){
@@ -55,7 +57,8 @@ public class Patex {
         this.chosenFileLines = null;
         this.outputPath = null;
         this.setOutputFormatchoices();
-        matrizValues = new ArrayList<ArrayList>();
+        this.matrizValues = new ArrayList<ArrayList>();
+        this.persistence = new Persistence();
     }
 
     private void setOutputFormatchoices() {
@@ -74,17 +77,6 @@ public class Patex {
 
     Boolean isChosenFileReadable() {
         return chosenFile.canRead();
-    }
-
-    Boolean readChosenFile() throws Exception {
-        if(this.isFileChosen() && this.isChosenFileReadable()){
-            this.chosenFileLines = Files.readAllLines(
-                this.chosenFile.toPath().toAbsolutePath()
-            );
-            return true;
-        }
-
-        throw new Exception("File was not chosen or is not readable");
     }
 
     Boolean isOutputPathSet() {
@@ -114,16 +106,6 @@ public class Patex {
     Boolean wasChosenFileRead() {
         return this.chosenFileLines != null;
     }
-
-    Boolean writeToOutputFile() throws Exception {
-        if(this.wasChosenFileRead() && this.isOutputFormatChosen() && this.isOutputPathSet()) 
-            return new Parser(this).writeToOutputFIle();
-
-        throw new Exception(
-            "You must choose the path to save the output file before"
-        );
-    }
-
 
     Boolean choseOutputFormat() throws Exception {
         if(!this.isOutputFormatChosen()){
@@ -207,8 +189,8 @@ public class Patex {
             this.chooseDelimiter();
             this.OutputPathChoose();
             this.choseOutputFormat();
-            this.readChosenFile();
-            this.writeToOutputFile();
+            this.persistence.readChosenFile(this);
+            this.persistence.writeToOutputFile(this);
         } catch (FileNotFoundException e){
             JOptionPane.showMessageDialog(null, "You must choose a file to continue");
         } catch (DelimitadorInvalidoException e){
