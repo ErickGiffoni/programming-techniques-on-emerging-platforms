@@ -1,0 +1,9 @@
+Testes passando (50%)? 30% 
+  -> Varios testes estão falhando, contudo há evidências que as transformações
+nos registros funcionam. 
+
+Formatos dos arquivods (50%)? 50%
+
+Nota final: 80%
+
+Comentarios:
