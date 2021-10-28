@@ -13,18 +13,18 @@ public class ReadFileTest extends ChooseFileTest {
     @Test()
     void testFileWasRead() throws Exception {
         this.patexapp = new Patex("../analysisMemory.out");
-        assertEquals(true, this.patexapp.readChosenFile());
+        assertEquals(true, this.patexapp.persistence.readChosenFile(this.patexapp));
     }
 
     @Test()
     void testAnotherFileWasRead() throws Exception {
         this.patexapp = new Patex("../analysisTime.out");
-        assertEquals(true, this.patexapp.readChosenFile());
+        assertEquals(true, this.patexapp.persistence.readChosenFile(this.patexapp));
     }
 
     @Test()
     void testExceptionIsThrownWhenFileDoesNotExist() throws Exception {
         this.patexapp = new Patex("../imaginaryFile.txt");
-        assertThrows(Exception.class, () -> this.patexapp.readChosenFile());
+        assertThrows(Exception.class, () -> this.patexapp.persistence.readChosenFile(this.patexapp));
     }
 }
